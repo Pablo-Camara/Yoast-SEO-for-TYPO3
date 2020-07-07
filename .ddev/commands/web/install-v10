@@ -6,13 +6,13 @@ rm -rf /var/www/html/$VERSION/*
 composer init -n -d /var/www/html/$VERSION
 composer config extra.typo3/cms.web-dir public -d /var/www/html/$VERSION
 composer config repositories.$EXTENSION_KEY path ../../$EXTENSION_KEY -d /var/www/html/$VERSION
-composer req t3/cms:'^10.4' typo3/cms-seo:'^10.4' $PACKAGE_NAME:'*@dev' --no-progress --no-suggest -n -d /var/www/html/$VERSION
+composer req t3/cms:'^10.4' typo3/cms-introduction:'^4.2' typo3/cms-seo:'^10.4' typo3/cms-about:'^10.4' typo3/cms-dashboard:'^10.4' $PACKAGE_NAME:'*@dev' --no-progress --no-suggest -n -d /var/www/html/$VERSION
 
 
 cd /var/www/html/$VERSION
 
 TYPO3_INSTALL_DB_DBNAME=$VERSION
-vendor/bin/typo3cms install:setup -n --database-name $VERSION
+vendor/bin/typo3cms install:setup -n --database-name $VERSION --site-setup-type no
 vendor/bin/typo3cms configuration:set 'BE/debug' 1
 vendor/bin/typo3cms configuration:set 'FE/debug' 1
 vendor/bin/typo3cms configuration:set 'SYS/devIPmask' '*'
@@ -25,7 +25,7 @@ vendor/bin/typo3cms configuration:set 'GFX/processor_path' '/usr/bin/'
 vendor/bin/typo3cms configuration:set 'GFX/processor_path_lzw' '/usr/bin/'
 vendor/bin/typo3cms install:generatepackagestates
 
-sed -i -e "s/base: ht\//base: \//g" /var/www/html/$VERSION/config/sites/main/config.yaml
-sed -i -e 's/base: \/en\//base: \//g' /var/www/html/$VERSION/config/sites/main/config.yaml
+mkdir config/sites/introduction
+cp -r public/typo3conf/ext/introduction/Initialisation/Site/introduction config/sites
 
 vendor/bin/typo3cms cache:flush
