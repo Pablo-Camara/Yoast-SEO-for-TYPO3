@@ -25,9 +25,10 @@ vendor/bin/typo3cms configuration:set 'GFX/processor_path' '/usr/bin/'
 vendor/bin/typo3cms configuration:set 'GFX/processor_path_lzw' '/usr/bin/'
 vendor/bin/typo3cms install:generatepackagestates
 
-mkdir config/sites/introduction
-cp -r public/typo3conf/ext/introduction/Initialisation/Site/introduction config/sites
+mkdir -p config/sites
+cp -r ~/config/sites/introduction config/sites
 
-cp ~/favicon.ico ./public
+sed -i -e "s/VERSION/$VERSION/g" /var/www/html/$VERSION/config/sites/introduction/config.yaml
 
+mysql -uroot -proot v10 < ~/v10.sql
 vendor/bin/typo3cms cache:flush
